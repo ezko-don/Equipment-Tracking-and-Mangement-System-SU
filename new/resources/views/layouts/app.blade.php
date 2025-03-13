@@ -24,8 +24,18 @@
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
+                    <button onclick="toggleDarkMode()" class="p-2 bg-gray-200 rounded-lg">
+                        🌙 Toggle Dark Mode
+                    </button>
+                    
+                    <script>
+                        function toggleDarkMode() {
+                            document.documentElement.classList.toggle('dark-mode');
+                        }
+                    </script>
                 </header>
             @endisset
+
 
             <!-- Page Content -->
             <main>
