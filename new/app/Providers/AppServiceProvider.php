@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Booking;
+use App\Policies\BookingPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,12 +15,16 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+    protected $policies = [
+        Booking::class => BookingPolicy::class,
+    ];
 
     /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
-        //
+      
     }
+   
 }

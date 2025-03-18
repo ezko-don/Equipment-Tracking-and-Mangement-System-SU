@@ -5,6 +5,11 @@
     <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold text-center text-gray-700">Welcome Back</h2>
         <p class="text-center text-gray-500">Login to access your account</p>
+        @if(session('success'))
+        <p>{{ session('success') }}</p>
+    @endif
+        
+
 
         <form method="POST" action="{{ route('login') }}" class="mt-4">
             @csrf
