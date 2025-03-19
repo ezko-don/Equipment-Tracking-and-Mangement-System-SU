@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -7,38 +8,50 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
-    // ✅ Show login page
-    public function create()
+    /**
+     * Display the login form.
+     */
+    public function showLoginForm()
     {
-        return view('auth.login'); // Ensure you have resources/views/auth/login.blade.php
+        return view('auth.login');
     }
 
-    // ✅ Handle login request
-    public function store(Request $request)
+    /**
+     * Handle an authentication attempt.
+     */
+    public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            // Redirect based on user role
             if (Auth::user()->is_admin) {
-                return redirect()->route('admin.dashboard'); // Redirect admins
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin!');
+            } else {
+                return redirect()->route('dashboard')->with('success', 'Login Successful!');
             }
-            return redirect()->route('dashboard'); // Redirect normal users
         }
 
-        return back()->withErrors(['email' => 'Invalid login credentials']);
+        return back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
     }
 
-    // ✅ Handle logout request
-    public function destroy(Request $request)
+    /**
+     * Logout the authenticated user.
+     */
+    public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login')->with('success', 'Logged out successfully');
+
+        return redirect()->route('login')->with('success', 'Logged out successfully!');
     }
 }

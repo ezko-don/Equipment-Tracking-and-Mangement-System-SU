@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -10,9 +9,14 @@ class IsAdmin
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || Auth::user()->role !== 'admin') {
-            return redirect('/dashboard')->with('error', 'Access denied.');
+        if (!Auth::check()) {
+            return redirect()->route('login'); // ✅ Redirect guests to login
         }
+
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('dashboard')->with('error', 'Unauthorized access.');
+        }
+
         return $next($request);
     }
 }

@@ -14,10 +14,18 @@ class Equipment extends Model
         'description', 
         'status', 
         'image', 
-        'status',
         'booked_by', 
         'event_name', 
         'location', 
         'booked_at'
     ];
+
+    protected $casts = [
+        'booked_at' => 'datetime',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'booked_by');
+    }
 }
